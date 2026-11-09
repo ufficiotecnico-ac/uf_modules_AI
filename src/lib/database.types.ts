@@ -17,6 +17,24 @@ export type Database = {
   }
   public: {
     Tables: {
+      booking_types: {
+        Row: {
+          active: boolean
+          id: string
+          name: string
+        }
+        Insert: {
+          active?: boolean
+          id: string
+          name: string
+        }
+        Update: {
+          active?: boolean
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
       classes: {
         Row: {
           active: boolean
@@ -35,6 +53,24 @@ export type Database = {
           id?: string
           name?: string
           school_year?: string
+        }
+        Relationships: []
+      }
+      outing_types: {
+        Row: {
+          active: boolean
+          id: string
+          name: string
+        }
+        Insert: {
+          active?: boolean
+          id: string
+          name: string
+        }
+        Update: {
+          active?: boolean
+          id?: string
+          name?: string
         }
         Relationships: []
       }
@@ -62,6 +98,24 @@ export type Database = {
           id?: string
           last_name?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      transport_types: {
+        Row: {
+          active: boolean
+          id: string
+          name: string
+        }
+        Insert: {
+          active?: boolean
+          id: string
+          name: string
+        }
+        Update: {
+          active?: boolean
+          id?: string
+          name?: string
         }
         Relationships: []
       }
