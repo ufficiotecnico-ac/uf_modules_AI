@@ -13,8 +13,7 @@ export function anonymousClient() {
   return newClient()
 }
 
-/** Client con l'accesso dell'utente di prova (credenziali in .env.local). */
-export async function signedInClient() {
+async function signIn() {
   const client = newClient()
   const { data, error } = await client.auth.signInWithPassword({
     email: import.meta.env.TEST_USER_EMAIL,
@@ -22,4 +21,15 @@ export async function signedInClient() {
   })
   if (error) throw new Error(`Login dell'utente di prova non riuscito: ${error.message}`)
   return { client, userId: data.user.id }
+}
+
+let session: ReturnType<typeof signIn> | undefined
+
+/**
+ * Client con l'accesso dell'utente di prova (credenziali in .env.local).
+ * Il login si fa una volta sola per file di test: Supabase limita gli accessi ravvicinati.
+ */
+export function signedInClient() {
+  session ??= signIn()
+  return session
 }

@@ -78,3 +78,38 @@ export function validOutingPayload(refs: ReferenceIds, overrides: OutingPayload 
     ...overrides,
   }
 }
+
+/** Una compilazione valida di più giorni (da domani a fra tre giorni), con maschi e femmine. */
+export function validMultiDayOutingPayload(
+  refs: ReferenceIds,
+  overrides: OutingPayload = {},
+): OutingPayload {
+  const start = dayFromToday(1)
+  const end = dayFromToday(3)
+  return validOutingPayload(refs, {
+    end_date: end,
+    classes: [
+      {
+        class_id: refs.klass['1A'],
+        students_count: 22,
+        males_count: 12,
+        females_count: 10,
+        students_with_disabilities: 1,
+      },
+    ],
+    transports: [
+      {
+        transport_type_id: 'train',
+        departure_place: 'Stazione centrale',
+        departure_day: start,
+        departure_time: '08:30',
+        destination: 'Roma',
+        return_required: true,
+        return_day: end,
+        return_time: '17:00',
+        notes: null,
+      },
+    ],
+    ...overrides,
+  })
+}
