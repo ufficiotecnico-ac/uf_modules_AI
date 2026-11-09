@@ -13,7 +13,8 @@ Applicazione web (Vite + React + TypeScript + shadcn/ui + Supabase) con una grig
 - Pianificazione **conclusa** il 2026-11-06. Nessuna implementazione ancora fatta.
 - **Passo 0 concluso** (2026-11-09): Vitest + Testing Library + jsdom, `bun run test` (singola esecuzione) e `bun run test:watch`; setup in `src/test/setup.ts`; `src/test/smoke.test.tsx` verifica l'infrastruttura.
 - **Passo 1 concluso** (2026-11-09): login email+password, sessione persistente, rotte protette con ritorno alla pagina richiesta, "Esci". Codice in `src/features/auth/` (`AuthProvider` riceve un `AuthClient`, nei test un finto in `src/test/fake-auth-client.ts`), `src/app-routes.tsx`, `src/app-shell.tsx`, `src/lib/supabase.ts`. `/` e `/modulo/:slug` sono segnaposto da sostituire (passi 3 e 5). `.env.local` esiste (non versionato). Non verificato in browser con un login riuscito: serve la password dell'utente di test.
-- **Prossimo passo:** passo 2 di SPEC.md, sezione 9 (elenchi: `people` e `classes`), poi i passi 3-6 in ordine. Prima di scrivere test, concordare con l'utente i seam da testare (regola della skill tdd).
+- **Passo 2 concluso** (2026-11-09): tabelle `people` e `classes` con RLS di sola lettura (migrazioni in `supabase/migrations/`), dati di prova in `supabase/seed-dev.sql` (già applicati), tipi generati in `src/lib/database.types.ts` (rigenerare dopo ogni migrazione). Test sul database reale con `bun run test:db` (file `*.db.test.ts` in `src/test/db/`, login con `TEST_USER_*` di `.env.local`); `bun run test` non tocca la rete.
+- **Prossimo passo:** passo 3 di SPEC.md, sezione 9 (griglia dei moduli), poi i passi 4-6 in ordine. Prima di scrivere test, concordare con l'utente i seam da testare (regola della skill tdd).
 - Database OutingModules: vuoto, tranne l'utente di test `test.utente@example.com` (la password non è nella repo: chiedila all'utente).
 - Codice: la pagina demo di Vite è stata rimossa; `src/main.tsx` monta `AppRoutes`. Il prototipo della griglia è archiviato in `.scratch/.../prototypes/griglia/` e **non** va promosso: si riscrive seguendo la specifica.
 
@@ -32,6 +33,8 @@ Applicazione web (Vite + React + TypeScript + shadcn/ui + Supabase) con una grig
 
 ## Note note
 
+- Il server MCP rifiuta i comandi SQL `drop` e `delete` (motivo ignoto): per quelli si chiede all'utente di eseguirli dall'SQL editor di Supabase. `insert`, `update`, `revoke`, `grant` e le migrazioni funzionano.
+- I test di sicurezza sul database fanno tentativi di scrittura: se la sicurezza è rotta possono alterare i dati di prova. Per verificare che i test sappiano fallire, indebolire le difese **solo per il tempo della prova** e ripristinare subito.
 - `bun run lint` segnala 4 errori `react-refresh/only-export-components` già presenti (file shadcn `button.tsx`, `badge.tsx`, `theme-provider.tsx` e un file in `.agents/`). Non sono dovuti al lavoro in corso.
 - `src/components/ui/*` importa `cn` dal pacchetto `cn`: è una scelta presente nel progetto.
 - Una sessione Claude Code nuova nasce con il server MCP del plugin Supabase (account-wide) da tenere **disattivato** da `/mcp`; si usa solo `supabase-scuola`.
