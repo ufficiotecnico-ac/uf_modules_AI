@@ -12,9 +12,10 @@ Applicazione web (Vite + React + TypeScript + shadcn/ui + Supabase) con una grig
 
 - Pianificazione **conclusa** il 2026-11-06. Nessuna implementazione ancora fatta.
 - **Passo 0 concluso** (2026-11-09): Vitest + Testing Library + jsdom, `bun run test` (singola esecuzione) e `bun run test:watch`; setup in `src/test/setup.ts`; `src/test/smoke.test.tsx` verifica l'infrastruttura.
-- **Prossimo passo:** passo 1 di SPEC.md, sezione 9 (fondamenta), poi i passi 2-6 in ordine. Prima di scrivere test, concordare con l'utente i seam da testare (regola della skill tdd).
+- **Passo 1 concluso** (2026-11-09): login email+password, sessione persistente, rotte protette con ritorno alla pagina richiesta, "Esci". Codice in `src/features/auth/` (`AuthProvider` riceve un `AuthClient`, nei test un finto in `src/test/fake-auth-client.ts`), `src/app-routes.tsx`, `src/app-shell.tsx`, `src/lib/supabase.ts`. `/` e `/modulo/:slug` sono segnaposto da sostituire (passi 3 e 5). `.env.local` esiste (non versionato). Non verificato in browser con un login riuscito: serve la password dell'utente di test.
+- **Prossimo passo:** passo 2 di SPEC.md, sezione 9 (elenchi: `people` e `classes`), poi i passi 3-6 in ordine. Prima di scrivere test, concordare con l'utente i seam da testare (regola della skill tdd).
 - Database OutingModules: vuoto, tranne l'utente di test `test.utente@example.com` (la password non è nella repo: chiedila all'utente).
-- Codice: ancora lo scaffold Vite con shadcn; `src/main.tsx` monta `App` (pagina demo). Il prototipo della griglia è archiviato in `.scratch/.../prototypes/griglia/` e **non** va promosso: si riscrive seguendo la specifica.
+- Codice: la pagina demo di Vite è stata rimossa; `src/main.tsx` monta `AppRoutes`. Il prototipo della griglia è archiviato in `.scratch/.../prototypes/griglia/` e **non** va promosso: si riscrive seguendo la specifica.
 
 ## Regole di lavoro
 
@@ -25,7 +26,7 @@ Applicazione web (Vite + React + TypeScript + shadcn/ui + Supabase) con una grig
 - Supabase: lavora **solo** sul progetto OutingModules (ref `dodmwpkjdzhyssimxtnv`) tramite il server MCP `supabase-scuola` (definito in `.mcp.json`, limitato a quel progetto). **Non toccare OutingProject.** Le migrazioni sono file in `supabase/migrations/` applicati con lo strumento di migrazione del server.
 - La `service_role`/secret key non va mai nel client né nella repo. La chiave pubblica sta nelle variabili `VITE_*`.
 - Nessuna password o segreto nei file della repo.
-- **Ogni commit su `main` fa il deploy automatico su Cloudflare** (il ramo remoto predefinito oggi è `master`: verificare con l'utente prima di toccarlo). Si lavora sul ramo `develop`.
+- **Ogni commit su `master` fa il deploy automatico su Cloudflare** (ramo di produzione). Si lavora sul ramo `develop`.
 - **Versioning:** un commit per passo (o per sotto-passo coerente), messaggi in stile Conventional Commits (`feat:`, `test:`, `chore:`, `docs:`, `fix:`), ogni commit con test verdi e `tsc` pulito, così ogni commit si può annullare da solo con `git revert`. Il commit lo crea Claude quando un passo è concluso e avvisa l'utente; **il push lo fa solo l'utente**. Mai `--force`, mai riscrivere la storia già pubblicata.
 - Prima di dichiarare un passo finito: i suoi test passano e `bunx tsc -b` non dà errori.
 

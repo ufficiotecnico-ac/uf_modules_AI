@@ -21,7 +21,7 @@ Passo 0 di SPEC.md sezione 9: configurare l'infrastruttura di test (`bun run tes
 - Supabase: progetto **OutingModules** (ref `dodmwpkjdzhyssimxtnv`), database vuoto tranne un utente di test `test.utente@example.com` (password consegnata in chat all'utente, **non nella repo**: chiedigliela se serve). Esiste anche OutingProject: non toccarlo.
 - Il server MCP `supabase-scuola` (`.mcp.json`) è limitato a OutingModules. Il server del plugin Supabase (account-wide) deve restare **disattivato** da `/mcp`. In una nuova sessione verifica che `supabase-scuola` sia connesso.
 - L'utente ha già spento "Allow new users to sign up" nella dashboard di Supabase.
-- Deploy: ogni commit su `main` fa il deploy su Cloudflare. **Nessun commit/push senza richiesta esplicita.**
+- Deploy: ogni commit su `master` fa il deploy su Cloudflare. **Nessun commit/push senza richiesta esplicita.**
 - Aggiunti da me al codice: `src/components/ui/card.tsx`, `badge.tsx`; creati `.env.example`, `CLAUDE.md`, `SPEC.md`, `GLOSSARY.md`; `.gitignore` esteso. `src/main.tsx` monta ancora `App` (demo Vite) nel ThemeProvider aggiunto dall'utente.
 - `bun run lint` ha 4 errori preesistenti (react-refresh nei file shadcn e in `.agents`); `bunx tsc -b` passa.
 
