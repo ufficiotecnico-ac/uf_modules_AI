@@ -22,7 +22,8 @@ Applicazione web (Vite + React + TypeScript + shadcn/ui + Supabase) con una grig
 - **Passo 4b, blocco 2 concluso**: la funzione rifiuta con codici di errore stabili (`invalid_outing_type`, `invalid_lead_person`, `no_companion`, `invalid_companion`, `duplicate_person`, `no_classes`, `invalid_class` (anche di un altro anno scolastico), `duplicate_class`, `invalid_transport_type`, `invalid_booking_type`); il client li tradurrà in italiano. Test in `submit-outing-rejections.db.test.ts`. Dati di prova aggiunti in `supabase/seed-dev.sql`.
 - **Passo 4b concluso** (blocco 3, 2026-11-09): la funzione controlla anche campi obbligatori (`missing_required_field`), date e orari (`start_date_in_past`, `end_before_start`, `return_before_departure`; "oggi" è la data italiana), alunni (`invalid_students_count`, `invalid_disabled_count`, `gender_counts_required`, `invalid_gender_counts`, `unexpected_gender_counts`) e trasporti (`transport_day_out_of_range`, `invalid_transport_return`). Test in `submit-outing-rules.db.test.ts` e `outing-access.db.test.ts`. Il login dei test è in cache per file (Supabase limita gli accessi ravvicinati).
 - **Totale test:** 13 dell'app (`bun run test`) e 96 sul database (`bun run test:db`). Righe `[TEST]` da cancellare a mano: dopo ogni esecuzione completa ne restano decine.
-- **Prossimo passo:** passo 5 (interfaccia dell'Uscita didattica): prima decidere con l'utente la gestione dello stato del form (valtio o simili, vedi "Da valutare"), poi schema `zod`, form a passi, pagina unica, riepilogo. I codici di errore della funzione vanno tradotti in italiano nel client. Prima di scrivere test, concordare con l'utente i seam da testare (regola della skill tdd).
+- **Passo 5, blocco 1 concluso** (2026-11-09): logica del modulo in `src/features/outing/`, senza schermo e testata come funzioni pure (114 test dell'app in tutto): `outing-form.ts` (tipi dei valori del form, tutto come testo), `outing-schema.ts` (`createOutingSchema({ today })`, regole come nel database), `outing-messages.ts` (messaggi di validazione in italiano), `outing-totals.ts`, `outing-payload.ts` (`toSubmitPayload`), `submit-error-messages.ts` (codici della funzione → italiano), `test-values.ts` (valori validi di prova). `today` è un parametro: in produzione sarà la data italiana.
+- **Prossimo passo:** passo 5, blocco 2 (form desktop in una pagina: campi, elenchi, errori sotto il campo, totali), poi blocco 3 (passi su smartphone), 4 (finestre trasporti e visite), 5 (riepilogo e invio), 6 (bozza nel browser). Prima di ogni blocco concordare con l'utente la lista dei test. Prima di scrivere test, concordare con l'utente i seam da testare (regola della skill tdd).
 - Database OutingModules: vuoto, tranne l'utente di test `test.utente@example.com` (la password non è nella repo: chiedila all'utente).
 - Codice: la pagina demo di Vite è stata rimossa; `src/main.tsx` monta `AppRoutes`. Il prototipo della griglia è archiviato in `.scratch/.../prototypes/griglia/` e **non** va promosso: si riscrive seguendo la specifica.
 
@@ -41,7 +42,12 @@ Applicazione web (Vite + React + TypeScript + shadcn/ui + Supabase) con una grig
 
 ## Da valutare più avanti
 
-- **Gestione dello stato del form** (passo 5): valutare **valtio** o librerie simili (stato reattivo a proxy) per i dati del modulo con elenchi annidati (classi, trasporti, visite), in alternativa o insieme a `react-hook-form` previsto in SPEC.md. Decidere con l'utente prima di scrivere il form.
+- Nessuna voce aperta. (La gestione dello stato del form è decisa, vedi sotto.)
+
+## Decisioni di sviluppo
+
+- **Stato del form (passo 5), deciso 2026-11-09:** `react-hook-form` + `zod` (`@hookform/resolvers`), **senza valtio** né altre librerie di stato. Motivi: il problema è di validazione (non di stato condiviso), un solo `useForm` condiviso con `FormProvider` basta per passi mobile e pagina desktop, `useFieldArray` copre gli elenchi, shadcn ha la guida ufficiale con `Field`. Con React Compiler attivo: **mai `watch()`** (il lint `react-hooks/incompatible-library` lo segnala), usare `useWatch` o `form.subscribe`; verificare `useFieldArray` con un test; se serve, `"use no memo"` sul componente.
+- Trasporti e visite: mini-form nella finestra `AlertDialog` con un proprio `useForm`; l'evento di invio della finestra va fermato (`stopPropagation`) perché risale al form principale attraverso il portale.
 
 ## Note note
 
