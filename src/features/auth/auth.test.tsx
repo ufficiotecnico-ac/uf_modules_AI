@@ -1,19 +1,14 @@
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { MemoryRouter } from 'react-router'
-import { AppRoutes } from '@/app-routes'
-import { AuthProvider } from '@/features/auth/auth-provider'
+import type { AuthClient } from '@/features/auth/auth-client'
 import { createFakeAuthClient } from '@/test/fake-auth-client'
+import { renderApp as renderWholeApp } from '@/test/render-app'
 
-function renderApp(path: string, client = createFakeAuthClient()) {
-  render(
-    <AuthProvider client={client}>
-      <MemoryRouter initialEntries={[path]}>
-        <AppRoutes />
-      </MemoryRouter>
-    </AuthProvider>,
-  )
+function renderApp(path: string, authClient: AuthClient = createFakeAuthClient()) {
+  renderWholeApp(path, { authClient })
 }
+
+const GREETING = 'Ciao, Giulia, che modulo vuoi compilare oggi?'
 
 describe('rotte protette', () => {
   it('porta al login chi non ha una sessione', async () => {
@@ -25,7 +20,7 @@ describe('rotte protette', () => {
   it('mostra la pagina richiesta a chi ha già una sessione', async () => {
     renderApp('/', createFakeAuthClient({ session: { user: { id: 'user-1' } } }))
 
-    expect(await screen.findByText('Moduli')).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: GREETING })).toBeInTheDocument()
     expect(screen.queryByRole('heading', { name: 'Accedi' })).not.toBeInTheDocument()
   })
 
@@ -91,7 +86,7 @@ describe('login', () => {
     expect(screen.getByRole('button', { name: 'Accesso in corso…' })).toBeDisabled()
 
     completeSignIn()
-    expect(await screen.findByText('Moduli')).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: GREETING })).toBeInTheDocument()
   })
 })
 

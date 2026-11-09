@@ -25,7 +25,7 @@ La persona che crea gli account dei colleghi, mantiene gli elenchi e legge e cor
 _Avoid_: admin, amministratore, autore
 
 **Persona**:
-Un membro del personale interno presente nell'elenco, selezionabile nei campi dei moduli. Può avere o non avere un account.
+Un membro del personale interno presente nell'elenco, selezionabile nei campi dei moduli. Può avere o non avere un account; ogni account ha invece sempre una persona collegata (`people.user_id`).
 _Avoid_: anagrafica, contatto
 
 **Accompagnatore**:

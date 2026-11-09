@@ -1,8 +1,10 @@
+import path from 'path'
 import { loadEnv } from 'vite'
 import { defineConfig } from 'vitest/config'
 
 /** Test di integrazione sul database reale (progetto OutingModules): `bun run test:db`. */
 export default defineConfig(({ mode }) => ({
+  resolve: { alias: { '@': path.resolve(import.meta.dirname, './src') } },
   test: {
     environment: 'node',
     globals: true,

@@ -23,7 +23,7 @@ I moduli saranno compilati soprattutto da **smartphone**: il mobile è il caso p
 - Gli account li crea il **gestore**; la registrazione pubblica è **spenta**. Nessun magic link, nessun "password dimenticata", nessun cambio password nell'app: le password le gestisce il gestore dalla dashboard di Supabase. Nella schermata di login compare un messaggio fisso, sotto il pulsante di accesso: **"Hai dimenticato la password? Rivolgiti al gestore"**.
 - Sessione **persistente** sul dispositivo, con pulsante "Esci".
 - Senza sessione si viene portati su `/login` e, dopo l'accesso, **riportati alla pagina richiesta** (link diretti ai moduli).
-- Il saluto "Ciao, <nome>" usa il nome della persona collegata all'account (`people.user_id = auth.uid()`).
+- Il saluto "Ciao, <nome>" usa il nome della persona collegata all'account (`people.user_id = auth.uid()`). **Regola:** ogni account ha sempre una persona collegata, è il gestore a crearla insieme all'account. Se manca, l'app non finge: mostra "Il tuo account non è collegato a nessuna persona. Rivolgiti al gestore."
 
 ## 4. Interfaccia
 
