@@ -5,17 +5,19 @@ Applicazione web (Vite + React + TypeScript + shadcn/ui + Supabase) con una grig
 ## Da dove ripartire
 
 1. Leggi [SPEC.md](./SPEC.md): è la specifica di consegna, con tutte le decisioni già prese. Non riaprire decisioni chiuse; se ne emerge una nuova, chiedila all'utente.
-2. Leggi [GLOSSARY.md](./GLOSSARY.md) e usa quei termini (modulo, compilazione, collega, gestore, persona, classe...).
-3. Le decisioni complete, le ricerche e il prototipo stanno in `.scratch/wayfinder/uscite-didattiche/` (`map.md` è l'indice). Non serve rileggerle tutte: la specifica le riassume.
+2. Per l'Uscita didattica leggi anche [MODULO-USCITA-DIDATTICA.md](./MODULO-USCITA-DIDATTICA.md): campi, sezioni, regole e tabelle del modulo (decisi con l'utente).
+3. Leggi [GLOSSARY.md](./GLOSSARY.md) e usa quei termini (modulo, compilazione, collega, gestore, persona, classe...).
+4. Le decisioni complete, le ricerche e il prototipo stanno in `.scratch/wayfinder/uscite-didattiche/` (`map.md` è l'indice). Non serve rileggerle tutte: la specifica le riassume.
 
 ## Stato attuale (aggiornare a ogni passo concluso)
 
-- Pianificazione **conclusa** il 2026-11-06. Nessuna implementazione ancora fatta.
+- Pianificazione **conclusa** il 2026-11-06, implementazione in corso (passi 0-3 fatti).
 - **Passo 0 concluso** (2026-11-09): Vitest + Testing Library + jsdom, `bun run test` (singola esecuzione) e `bun run test:watch`; setup in `src/test/setup.ts`; `src/test/smoke.test.tsx` verifica l'infrastruttura.
-- **Passo 1 concluso** (2026-11-09): login email+password, sessione persistente, rotte protette con ritorno alla pagina richiesta, "Esci". Codice in `src/features/auth/` (`AuthProvider` riceve un `AuthClient`, nei test un finto in `src/test/fake-auth-client.ts`), `src/app-routes.tsx`, `src/app-shell.tsx`, `src/lib/supabase.ts`. `/` e `/modulo/:slug` sono segnaposto da sostituire (passi 3 e 5). `.env.local` esiste (non versionato). Non verificato in browser con un login riuscito: serve la password dell'utente di test.
+- **Passo 1 concluso** (2026-11-09): login email+password, sessione persistente, rotte protette con ritorno alla pagina richiesta, "Esci". Codice in `src/features/auth/` (`AuthProvider` riceve un `AuthClient`, nei test un finto in `src/test/fake-auth-client.ts`), `src/app-routes.tsx`, `src/app-shell.tsx`, `src/lib/supabase.ts`. `/` e `/modulo/:slug` sono segnaposto da sostituire (passi 3 e 5). `.env.local` esiste (non versionato). Login riuscito verificato su Supabase con l'utente di test.
 - **Passo 2 concluso** (2026-11-09): tabelle `people` e `classes` con RLS di sola lettura (migrazioni in `supabase/migrations/`), dati di prova in `supabase/seed-dev.sql` (già applicati), tipi generati in `src/lib/database.types.ts` (rigenerare dopo ogni migrazione). Test sul database reale con `bun run test:db` (file `*.db.test.ts` in `src/test/db/`, login con `TEST_USER_*` di `.env.local`); `bun run test` non tocca la rete.
 - **Passo 3 concluso** (2026-11-09): griglia dei moduli in `src/features/modules/` (elenco unico in `modules.ts`, `ModuleCard`, `HomePage`), saluto dalla persona collegata (`src/features/people/`: `PeopleApi` + provider + `useCurrentPerson`; nei test un finto in `src/test/fake-people-api.ts`, helper `src/test/render-app.tsx`). `/modulo/:slug` è ancora un segnaposto (passo 5). Regola: ogni account ha sempre una persona collegata.
-- **Prossimo passo:** passo 4 di SPEC.md, sezione 9 (Uscita didattica, dati: migrazioni e funzione di salvataggio), poi i passi 5-6 in ordine. Prima di scrivere test, concordare con l'utente i seam da testare (regola della skill tdd).
+- **Campi del modulo decisi** (2026-11-09) in MODULO-USCITA-DIDATTICA.md (ticket 07 della mappa).
+- **Prossimo passo:** passo 4 di SPEC.md, sezione 9 (Uscita didattica, dati: tabelle di tipi, tabelle del modulo e funzione di salvataggio, come da MODULO-USCITA-DIDATTICA.md), poi i passi 5-6 in ordine. Prima di scrivere test, concordare con l'utente i seam da testare (regola della skill tdd).
 - Database OutingModules: vuoto, tranne l'utente di test `test.utente@example.com` (la password non è nella repo: chiedila all'utente).
 - Codice: la pagina demo di Vite è stata rimossa; `src/main.tsx` monta `AppRoutes`. Il prototipo della griglia è archiviato in `.scratch/.../prototypes/griglia/` e **non** va promosso: si riscrive seguendo la specifica.
 

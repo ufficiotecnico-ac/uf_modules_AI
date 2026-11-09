@@ -15,7 +15,7 @@ Una **specifica di handoff** pronta da implementare: dashboard a griglia di modu
 - Lingua di lavoro: italiano.
 - Stack già nel repo: Vite + React 19 + TypeScript, **shadcn/ui già installato** (`components.json`, `src/components/ui`; skill in `.agents/skills/shadcn`). La grafica usa shadcn.
 - Backend: **Supabase** (skill `supabase:supabase` e `supabase:supabase-postgres-best-practices` da consultare per schema/RLS).
-- Deploy: già configurato. Ogni commit su `main` della repo GitHub fa il deploy automatico su **Cloudflare**. Nessun lavoro di deploy da pianificare: serve solo scrivere il codice.
+- Deploy: già configurato. Ogni commit su `master` della repo GitHub fa il deploy automatico su **Cloudflare**. Nessun lavoro di deploy da pianificare: serve solo scrivere il codice.
 - Package manager: **bun** (mai npm). Comandi come `bun add`, `bunx --bun shadcn@latest ...`, `bun run dev`.
 - Progetto Supabase: **OutingModules** (ref `dodmwpkjdzhyssimxtnv`, eu-west-1), database vuoto (nessuna tabella in `public`). Accesso dell'agente via server MCP `supabase-scuola`, limitato a quel progetto con `project_ref` in `.mcp.json`; il server del plugin (account-wide) è disattivato. Esiste anche un altro progetto, OutingProject: non toccarlo. Le modifiche allo schema vanno anche salvate come file di migrazione SQL in repo.
 - Il primo (e per ora unico) modulo è **Uscita didattica**. I suoi campi si decidono quando si implementa la sua pagina.
@@ -34,10 +34,11 @@ Una **specifica di handoff** pronta da implementare: dashboard a griglia di modu
 - [Modello di accesso: login e utenti](tickets/04-modello-di-accesso-grilling.md): login email+password, utenti creati dall'autore con registrazione spenta, sessione persistente e ritorno alla pagina richiesta dopo il login; nessun reset/cambio password nell'app; tabella persone con nome e cognome per la testata; utente di test creato.
 - [Modello dati Supabase e regole RLS](tickets/05-modello-dati-supabase-grilling.md): una tabella per modulo con colonne tipizzate e vincoli, nomi in inglese; `people` (solo personale interno, `user_id` facoltativo) e `classes` (per anno scolastico) di sola lettura per i colleghi; accompagnatori e classi come tabelle di collegamento, solo da elenco; salvataggio tutto o niente tramite una funzione sul database, senza scritture dirette; uuid generato dal client; migrazioni additive come file in `supabase/migrations/` applicate dal server MCP.
 - [Validazione e prevenzione dell'errore umano](tickets/06-validazione-e-prevenzione-errori-grilling.md): schema `zod` per modulo nel client (react-hook-form + shadcn) con le regole critiche ripetute nel database; errori in italiano sotto il campo, controllo al passaggio di sezione su mobile e all'invio su desktop, ricontrollo a ogni modifica; data di inizio non nel passato; riepilogo obbligatorio prima dell'invio; dati in corso salvati nel browser e cancellati dopo l'invio e al logout; autocompletamento delle persone con filtro locale.
+- [Campi e sezioni del modulo Uscita didattica](tickets/07-campi-e-sezioni-uscita-didattica-grilling.md): modulo ricco (classi con conteggi, referente e accompagnatori, trasporti e visite in AlertDialog, tre tabelle di tipi gestite dal gestore); sei passi su smartphone più riepilogo, una pagina su desktop; dettagli in `MODULO-USCITA-DIDATTICA.md`.
 
 ## Not yet specified
 
-- **Campi di ogni modulo** (a partire da Uscita didattica): decisi quando si implementa la rispettiva pagina, non in questa mappa.
+- **Campi dei moduli futuri** (oltre l'Uscita didattica): decisi quando si costruisce ciascun modulo.
 - **Bozza sul server**: i dati in corso restano solo nel browser (decisione sulla validazione); una bozza salvata su Supabase non è prevista.
 - **Accompagnatori esterni o da definire**: per ora non si possono indicare (solo persone in `people`). Si riprende se serve un testo libero o un elenco di esterni.
 - **Caricamento massivo dei colleghi**: sono tanti; come creare gli utenti (script, import) si decide più avanti.

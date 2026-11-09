@@ -29,8 +29,12 @@ Un membro del personale interno presente nell'elenco, selezionabile nei campi de
 _Avoid_: anagrafica, contatto
 
 **Accompagnatore**:
-Una persona dell'elenco che partecipa a un'uscita didattica. Deve esistere nell'elenco: non si può indicare chi non c'è.
+Una persona dell'elenco che partecipa a un'uscita didattica. Deve esistere nell'elenco: non si può indicare chi non c'è. Ogni uscita ha almeno un accompagnatore obbligatorio, più eventuali altri accompagnatori facoltativi.
 _Avoid_: partecipante, esterno
+
+**Referente**:
+La persona dell'elenco responsabile di un'uscita didattica. È diversa dagli accompagnatori e nessuna persona compare due volte nello stesso modulo.
+_Avoid_: responsabile, capogruppo
 
 **Classe**:
 Un gruppo di alunni identificato da un nome, valido per un solo anno scolastico. La stessa denominazione in anni diversi è una classe diversa.
@@ -47,3 +51,19 @@ _Avoid_: anagrafica, archivio
 **Griglia dei moduli**:
 La pagina iniziale con una scheda per ogni modulo, compresi quelli non ancora disponibili, segnati come "In arrivo".
 _Avoid_: dashboard (si confonde con la dashboard di Supabase), home
+
+**Tipologia di uscita**:
+La categoria a cui appartiene un'uscita didattica, scelta da un elenco mantenuto dal gestore. Può essere accompagnata da un **progetto**, un testo libero facoltativo.
+_Avoid_: tipo di gita, categoria
+
+**Necessità**:
+Ciò che l'uscita richiede per accogliere tutti gli alunni (per esempio pedane o carrozzine). Testo libero facoltativo.
+_Avoid_: esigenze, requisiti
+
+**Trasporto**:
+Un mezzo da prenotare per un'uscita, con partenza, destinazione ed eventuale ritorno. Un'uscita può averne zero, uno o più (gli alunni possono prendere due mezzi).
+_Avoid_: viaggio, spostamento
+
+**Visita**:
+Una prenotazione di un tipo (fiera, guida, laboratorio...) con descrizione e orario, legata a un'uscita.
+_Avoid_: prenotazione generica, ingresso

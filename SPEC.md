@@ -58,7 +58,7 @@ Convenzioni: nomi di tabelle e colonne in **inglese**, snake_case. Una **tabella
 - `people`: `id`, `first_name`, `last_name`, `email`, `user_id` (facoltativo, unico, riferimento a `auth.users`), `active`. Solo personale interno. Dati riservati futuri in un'altra tabella.
 - `classes`: `id`, `school_year`, `name`, `active`; nome unico per anno scolastico. L'anno scolastico in corso si ricava dalla data (inizio a settembre). A settembre il gestore copia l'elenco dell'anno precedente e corregge le differenze.
 
-**Modulo Uscita didattica** (tabella principale, nome da definire, es. `outing_requests`)
+**Modulo Uscita didattica**: campi, sezioni, regole e tabelle sono in [MODULO-USCITA-DIDATTICA.md](./MODULO-USCITA-DIDATTICA.md), che prevale su quanto segue per i campi del modulo. Sintesi (tabella principale `outing_requests`):
 - Colonne comuni a ogni modulo: `id` (uuid **generato dal client** all'apertura del modulo e rigenerato dopo ogni invio riuscito; non è un hash dei dati), `user_id` (default `auth.uid()`), `created_at`.
 - Colonne note: data di inizio e data di fine (CHECK fine >= inizio). Gli altri campi dell'uscita (destinazione, numero di alunni, motivazione, ...) **si definiscono quando si costruisce la pagina**; quelli nel prototipo erano inventati.
 - Tabelle di collegamento: `outing_companions` (uscita + `person_id` verso `people`, sempre una persona dell'elenco) e `outing_classes` (uscita + classe).
@@ -107,8 +107,8 @@ Ogni passo è completo da solo e si può verificare.
 1. **Fondamenta:** client Supabase con le variabili d'ambiente, router, schermata di login, sessione persistente, rotte protette con ritorno alla pagina richiesta, pulsante "Esci".
 2. **Elenchi:** migrazione con `people` e `classes`, RLS di sola lettura, una persona collegata all'utente di test, classi di esempio dell'anno in corso.
 3. **Griglia dei moduli:** testata con il nome, schede con descrizione e "In arrivo", navigazione alla pagina del modulo.
-4. **Uscita didattica, dati:** migrazione della tabella del modulo, delle tabelle di collegamento e della funzione di salvataggio con i suoi controlli; test con l'utente di test.
-5. **Uscita didattica, interfaccia:** definire i campi veri, schema `zod`, form a passi su mobile e pagina unica su desktop, autocompletamento delle persone, selezione delle classi, riepilogo, salvataggio locale dei dati in corso, stati di invio.
+4. **Uscita didattica, dati** (tabelle e regole in MODULO-USCITA-DIDATTICA.md): migrazione della tabella del modulo, delle tabelle di collegamento e della funzione di salvataggio con i suoi controlli; test con l'utente di test.
+5. **Uscita didattica, interfaccia:** schema `zod` dai campi di MODULO-USCITA-DIDATTICA.md, form a passi su mobile e pagina unica su desktop, autocompletamento delle persone, selezione delle classi, riepilogo, salvataggio locale dei dati in corso, stati di invio.
 6. **Rifinitura e deploy:** verifica del primo deploy su Cloudflare, prova su smartphone reale, controllo degli avvisi di sicurezza e prestazioni del database (advisors di Supabase).
 
 ## 10. Fuori scopo (per ora)
@@ -121,7 +121,7 @@ Ogni passo è completo da solo e si può verificare.
 
 ## 11. Da decidere più avanti
 
-- Campi precisi di ogni modulo, a partire dall'Uscita didattica.
+- Campi dei moduli futuri (quelli dell'Uscita didattica sono decisi in [MODULO-USCITA-DIDATTICA.md](./MODULO-USCITA-DIDATTICA.md)).
 - Accompagnatori esterni o ancora da definire (oggi non si possono indicare).
 - Caricamento massivo dei colleghi (sono tanti): script o importazione.
 - Reset password via mail (richiede un servizio SMTP personalizzato: il servizio integrato di Supabase invia 2 mail all'ora e solo agli indirizzi del team).
