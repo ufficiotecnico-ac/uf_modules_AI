@@ -11,7 +11,8 @@ Applicazione web (Vite + React + TypeScript + shadcn/ui + Supabase) con una grig
 ## Stato attuale (aggiornare a ogni passo concluso)
 
 - Pianificazione **conclusa** il 2026-11-06. Nessuna implementazione ancora fatta.
-- **Prossimo passo:** passo 0 di SPEC.md, sezione 9 (configurare l'infrastruttura di test), poi i passi 1-6 in ordine.
+- **Passo 0 concluso** (2026-11-09): Vitest + Testing Library + jsdom, `bun run test` (singola esecuzione) e `bun run test:watch`; setup in `src/test/setup.ts`; `src/test/smoke.test.tsx` verifica l'infrastruttura.
+- **Prossimo passo:** passo 1 di SPEC.md, sezione 9 (fondamenta), poi i passi 2-6 in ordine. Prima di scrivere test, concordare con l'utente i seam da testare (regola della skill tdd).
 - Database OutingModules: vuoto, tranne l'utente di test `test.utente@example.com` (la password non è nella repo: chiedila all'utente).
 - Codice: ancora lo scaffold Vite con shadcn; `src/main.tsx` monta `App` (pagina demo). Il prototipo della griglia è archiviato in `.scratch/.../prototypes/griglia/` e **non** va promosso: si riscrive seguendo la specifica.
 
@@ -24,7 +25,8 @@ Applicazione web (Vite + React + TypeScript + shadcn/ui + Supabase) con una grig
 - Supabase: lavora **solo** sul progetto OutingModules (ref `dodmwpkjdzhyssimxtnv`) tramite il server MCP `supabase-scuola` (definito in `.mcp.json`, limitato a quel progetto). **Non toccare OutingProject.** Le migrazioni sono file in `supabase/migrations/` applicati con lo strumento di migrazione del server.
 - La `service_role`/secret key non va mai nel client né nella repo. La chiave pubblica sta nelle variabili `VITE_*`.
 - Nessuna password o segreto nei file della repo.
-- **Ogni commit su `main` fa il deploy automatico su Cloudflare:** non fare commit né push se l'utente non lo chiede.
+- **Ogni commit su `main` fa il deploy automatico su Cloudflare** (il ramo remoto predefinito oggi è `master`: verificare con l'utente prima di toccarlo). Si lavora sul ramo `develop`.
+- **Versioning:** un commit per passo (o per sotto-passo coerente), messaggi in stile Conventional Commits (`feat:`, `test:`, `chore:`, `docs:`, `fix:`), ogni commit con test verdi e `tsc` pulito, così ogni commit si può annullare da solo con `git revert`. Il commit lo crea Claude quando un passo è concluso e avvisa l'utente; **il push lo fa solo l'utente**. Mai `--force`, mai riscrivere la storia già pubblicata.
 - Prima di dichiarare un passo finito: i suoi test passano e `bunx tsc -b` non dà errori.
 
 ## Note note
