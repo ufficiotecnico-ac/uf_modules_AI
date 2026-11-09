@@ -18,11 +18,16 @@ export function dayFromToday(offset: number) {
 /** Gli id reali di persone e classi di prova, per cognome e nome della classe. */
 export async function loadReferenceIds(client: Client) {
   const people = await client.from('people').select('id, last_name')
-  const classes = await client.from('classes').select('id, name').eq('school_year', '2026/2027')
+  const classes = await client.from('classes').select('id, name, school_year')
   if (people.error || classes.error) throw new Error('Impossibile leggere gli elenchi di prova')
+  const currentYear = classes.data.filter((c) => c.school_year === '2026/2027')
+  const previousYear = classes.data.filter((c) => c.school_year === '2025/2026')
   return {
     person: Object.fromEntries(people.data.map((p) => [p.last_name, p.id])),
-    klass: Object.fromEntries(classes.data.map((c) => [c.name, c.id])),
+    /** Classi dell'anno scolastico in corso, per nome (3D è disattivata). */
+    klass: Object.fromEntries(currentYear.map((c) => [c.name, c.id])),
+    /** Classi dell'anno scolastico precedente, per nome. */
+    previousYearKlass: Object.fromEntries(previousYear.map((c) => [c.name, c.id])),
   }
 }
 

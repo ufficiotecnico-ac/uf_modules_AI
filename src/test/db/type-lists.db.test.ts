@@ -3,10 +3,14 @@ import { anonymousClient, signedInClient } from './clients'
 const TYPE_LISTS = ['outing_types', 'transport_types', 'booking_types'] as const
 
 describe('elenchi di tipi: lettura da utente loggato', () => {
-  it('le tipologie di uscita sono quelle concordate', async () => {
+  it('le tipologie di uscita attive sono quelle concordate', async () => {
     const { client } = await signedInClient()
 
-    const { data, error } = await client.from('outing_types').select('id, name, active').order('id')
+    const { data, error } = await client
+      .from('outing_types')
+      .select('id, name, active')
+      .eq('active', true)
+      .order('id')
 
     expect(error).toBeNull()
     expect(data).toHaveLength(11)
@@ -22,7 +26,11 @@ describe('elenchi di tipi: lettura da utente loggato', () => {
   it('i mezzi di trasporto sono treno e altro', async () => {
     const { client } = await signedInClient()
 
-    const { data, error } = await client.from('transport_types').select('id, name').order('id')
+    const { data, error } = await client
+      .from('transport_types')
+      .select('id, name')
+      .eq('active', true)
+      .order('id')
 
     expect(error).toBeNull()
     expect(data).toEqual([
@@ -34,7 +42,11 @@ describe('elenchi di tipi: lettura da utente loggato', () => {
   it('i tipi di prenotazione sono fiere, guide, laboratori e altro', async () => {
     const { client } = await signedInClient()
 
-    const { data, error } = await client.from('booking_types').select('id, name').order('id')
+    const { data, error } = await client
+      .from('booking_types')
+      .select('id, name')
+      .eq('active', true)
+      .order('id')
 
     expect(error).toBeNull()
     expect(data).toEqual([
