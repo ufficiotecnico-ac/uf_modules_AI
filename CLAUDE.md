@@ -18,7 +18,8 @@ Applicazione web (Vite + React + TypeScript + shadcn/ui + Supabase) con una grig
 - **Passo 3 concluso** (2026-11-09): griglia dei moduli in `src/features/modules/` (elenco unico in `modules.ts`, `ModuleCard`, `HomePage`), saluto dalla persona collegata (`src/features/people/`: `PeopleApi` + provider + `useCurrentPerson`; nei test un finto in `src/test/fake-people-api.ts`, helper `src/test/render-app.tsx`). `/modulo/:slug` è ancora un segnaposto (passo 5). Regola: ogni account ha sempre una persona collegata.
 - **Campi del modulo decisi** (2026-11-09) in MODULO-USCITA-DIDATTICA.md (ticket 07 della mappa).
 - **Passo 4a concluso** (2026-11-09): tabelle di tipi `outing_types`, `transport_types`, `booking_types` (chiavi in inglese, valori iniziali nella migrazione, sola lettura per i loggati), con test in `src/test/db/type-lists.db.test.ts`.
-- **Prossimo passo:** passo 4b di SPEC.md, sezione 9 (tabelle del modulo e funzione di salvataggio, come da MODULO-USCITA-DIDATTICA.md), poi i passi 5-6 in ordine. Prima di scrivere test, concordare con l'utente i seam da testare (regola della skill tdd).
+- **Passo 4b, blocco 1 concluso** (2026-11-09): cinque tabelle del modulo (`outing_requests`, `outing_classes`, `outing_companions`, `outing_transports`, `outing_bookings`, senza accesso diretto) e funzione `submit_outing_request(payload jsonb)` (`saved` / `already_saved`, tutto o niente). Test in `src/test/db/submit-outing.db.test.ts`, payload di prova in `outing-payload.ts`. **I test lasciano righe nel database:** hanno la destinazione che inizia per `[TEST]`; l'utente le cancella dall'SQL editor con `delete from public.outing_requests where destination like '[TEST]%';` (il server MCP rifiuta i delete). I test non possono leggere le tabelle del modulo: la scrittura delle righe figlie si verifica con una query di sola lettura via MCP.
+- **Prossimo passo:** passo 4b, blocchi 2 (rifiuti per persone, classi, tipi, doppioni) e 3 (date, orari, totali, accesso). Poi i passi 5-6. Prima di scrivere test, concordare con l'utente i seam da testare (regola della skill tdd).
 - Database OutingModules: vuoto, tranne l'utente di test `test.utente@example.com` (la password non è nella repo: chiedila all'utente).
 - Codice: la pagina demo di Vite è stata rimossa; `src/main.tsx` monta `AppRoutes`. Il prototipo della griglia è archiviato in `.scratch/.../prototypes/griglia/` e **non** va promosso: si riscrive seguendo la specifica.
 
@@ -34,6 +35,10 @@ Applicazione web (Vite + React + TypeScript + shadcn/ui + Supabase) con una grig
 - **Ogni commit su `master` fa il deploy automatico su Cloudflare** (ramo di produzione). Si lavora sul ramo `develop`.
 - **Versioning:** un commit per passo (o per sotto-passo coerente), messaggi in stile Conventional Commits (`feat:`, `test:`, `chore:`, `docs:`, `fix:`), ogni commit con test verdi e `tsc` pulito, così ogni commit si può annullare da solo con `git revert`. Il commit lo crea Claude quando un passo è concluso e avvisa l'utente; **il push lo fa solo l'utente**. Mai `--force`, mai riscrivere la storia già pubblicata.
 - Prima di dichiarare un passo finito: i suoi test passano e `bunx tsc -b` non dà errori.
+
+## Da valutare più avanti
+
+- **Gestione dello stato del form** (passo 5): valutare **valtio** o librerie simili (stato reattivo a proxy) per i dati del modulo con elenchi annidati (classi, trasporti, visite), in alternativa o insieme a `react-hook-form` previsto in SPEC.md. Decidere con l'utente prima di scrivere il form.
 
 ## Note note
 
